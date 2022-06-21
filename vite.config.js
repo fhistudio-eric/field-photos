@@ -1,7 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()]
+  plugins: [vue()],
+  base: "",
+  // server: {
+  //   origin: "http://localhost:3000",
+  //   proxy: {
+  //     '/phpmm': {
+  //       // target: 'https://materials.fhistudio.com/',
+  //       target: 'https://www.fhistudio-apps.com/',
+  //       changeOrigin: true,
+  //       secure: true,
+  //       ws: false,
+  //     }
+  //   }
+  // },
 })
