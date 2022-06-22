@@ -73,11 +73,15 @@
           to="viewer"
           class="
             mb-6
-            text-gray-500
+            text-gray-900
             rounded-full
-            border border-gray-900
+            border border-gray-200
+            shadow-lg
             p-2
             px-6
+            hover:shadow-xl
+            transition-all
+            duration-300
           "
           >Photo Viewer</router-link
         >
