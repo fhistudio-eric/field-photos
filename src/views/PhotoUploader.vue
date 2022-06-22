@@ -1,5 +1,13 @@
 <template>
-  <div class="flex flex-col h-2/3 overflow-hidden relative">
+  <div
+    class="
+      flex flex-col
+      h-full
+      overflow-hidden
+      relative
+      md:container md:mx-auto md:w-[360px]
+    "
+  >
     <div
       class="
         absolute
@@ -16,7 +24,7 @@
       :class="{ '-mt-20': uploadSuccess == false }"
     >
       <div
-        class="p-4 px-8 rounded-full text-white text-2xl"
+        class="p-2 px-8 rounded-full text-white text-2xl"
         :class="{
           'bg-green-600': uploadStatus == 'Success',
           'bg-red-600': uploadStatus != 'Success',
@@ -32,12 +40,31 @@
         </div>
       </div>
     </div>
-    <div class="bg-gray-900 p-4 text-white text-lg">
-      <router-link to="/" class="flex items-center">
-        <ArrowLeftIcon class="h-5 w-5 text-white mr-1" /> Back</router-link
+    <div class="bg-gray-900 p-0 text-white flex justify-between">
+      <router-link
+        to="/"
+        class="flex items-center bg-gray-900 hover:bg-gray-800 p-4"
       >
+        <ArrowLeftIcon class="h-4 w-4 text-white mr-1" /> Back</router-link
+      >
+      <div class="flex items-center justify-end text-right p-4">
+        <div v-if="locationAcquired == false" class="text-xs mr-1">
+          Getting Location
+        </div>
+        <div v-else class="text-xs mr-1">
+          {{ lat.toString().slice(0, 8) }},{{ lng.toString().slice(0, 8) }}
+        </div>
+        <GlobeIcon
+          class="h-5 w-5"
+          :class="{
+            'text-green-500': locationAcquired == true,
+            'text-red-500 animate-spin': locationAcquired == false,
+          }"
+          @click="getLocation"
+        />
+      </div>
     </div>
-    <div class="flex-grow">
+    <div class="h-1/2">
       <div
         v-if="!photoURL"
         class="flex justify-center items-center w-full h-full"
@@ -78,47 +105,65 @@
           items-center
           overflow-hidden
           relative
+          p-2
         "
       >
         <button
-          class="p-2 mt-2 bg-white w-full z-40 shadow-md"
+          class="
+            p-2
+            mt-2
+            bg-white
+            z-40
+            absolute
+            top-0
+            right-0
+            rounded-full
+            shadow-xl
+          "
           @click="retakePhoto"
         >
-          Re-take Photo
+          Retake Photo
         </button>
-        <div class="h-full">
-          <img :src="photoURL" class="w-[300px]" />
+        <div class="h-full p-2 bg-white shadow-md shadow-blue-200">
+          <img :src="photoURL" class="max-h-[340px]" />
         </div>
       </div>
     </div>
-  </div>
-  <div class="bg-white p-6 h-1/3 flex flex-col justify-between">
-    <div class="flex flex-col flex-grow">
-      <div class="text-lg font-bold mt-2">Notes:</div>
-      <div class="w-full h-full flex-grow">
-        <textarea
-          class="w-full border border-gray-500 p-2 h-5/6 rounded-sm resize-none"
-          placeholder="describe this image"
-          v-model="photoNotes"
-        ></textarea>
+    <div class="bg-white p-6 flex-grow flex flex-col justify-between">
+      <div class="flex flex-col flex-grow">
+        <div class="text-lg font-bold mt-2">Notes:</div>
+        <div class="w-full h-full flex-grow">
+          <textarea
+            class="
+              w-full
+              border border-gray-500
+              p-2
+              h-5/6
+              rounded-sm
+              resize-none
+            "
+            placeholder="describe this image"
+            v-model="photoNotes"
+          ></textarea>
+        </div>
       </div>
-    </div>
-    <div class="w-full">
-      <button
-        class="
-          w-full
-          border border-gray-500
-          bg-white
-          p-4
-          text-xl
-          rounded-sm
-          disabled:opacity-50
-        "
-        :disabled="photoURL == null ? true : false"
-        @click="submitPhoto"
-      >
-        Submit
-      </button>
+      <div class="w-full">
+        <button
+          class="
+            w-full
+            border border-gray-500
+            bg-white
+            p-4
+            text-xl
+            rounded-sm
+            disabled:opacity-50
+          "
+          :disabled="photoURL == null ? true : false"
+          @click="locateMe"
+        >
+          Submit
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -132,18 +177,27 @@ import axios from "axios";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { CameraIcon } from "@heroicons/vue/outline";
 import { BadgeCheckIcon } from "@heroicons/vue/outline";
+import { GlobeIcon } from "@heroicons/vue/solid";
 
 const store = defaultStore();
 const router = useRouter();
 const route = useRoute();
 
+onMounted(() => {
+  locateMe();
+});
+
 const uploadTime = ref();
 const photoFile = ref();
-const photoURL = ref();
+const photoURL = ref(null);
 const photoNotes = ref();
 const uploadSuccess = ref(false);
 const uploadStatus = ref("");
 const responsedata = ref();
+const location = ref();
+const locationAcquired = ref(false);
+const lat = ref();
+const lng = ref();
 
 const setImage = (e) => {
   photoFile.value = e.target.files[0];
@@ -153,27 +207,38 @@ const retakePhoto = (e) => {
   photoURL.value = null;
 };
 
+const makeid = (length) => {
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 const submitPhoto = async () => {
-  // var data = {
-  //   photo: photoFile.value,
-  //   url: photoURL.value,
-  // };
-  // const formData = getFormData(data);
+  var rand = makeid(5);
+  locationAcquired.value = false;
 
   let formData = new FormData();
   formData.append("file", photoFile.value);
   formData.append("url", photoURL.value);
   formData.append("userName", store.userName);
   formData.append("sessionName", store.sessionName);
-  formData.append("sessionNameNoSapce", store.sessionName.replace(/\s/g, ""));
+  formData.append("randomString", rand);
   formData.append("sessionNotes", store.sessionNotes);
   formData.append("sessionDate", store.sessionDate);
   formData.append("photoNotes", photoNotes.value);
   formData.append("uploadTime", new Date().toLocaleTimeString());
+  formData.append("lat", lat.value);
+  formData.append("lng", lng.value);
 
   const response = await axios
     .post(
-      "https://www.fhistudio-apps.com/fieldphotos/php/upload.php",
+      "/php/upload.php",
+      // "https://www.fhistudio-apps.com/fieldphotos/php/upload.php",
       formData,
       {
         headers: {
@@ -207,9 +272,37 @@ const submitPhoto = async () => {
     });
 };
 
-const getFormData = (object) =>
-  Object.keys(object).reduce((formData, key) => {
-    formData.append(key, object[key]);
-    return formData;
-  }, new FormData());
+const getLocation = async () => {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) {
+      reject(new Error("Geolocation is not available."));
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        lat.value = pos.coords.latitude;
+        lng.value = pos.coords.longitude;
+        if (photoURL.value != null) {
+          submitPhoto();
+        }
+        resolve(pos);
+      },
+      (err) => {
+        console.log(err);
+        reject(err);
+      }
+    );
+  });
+};
+
+const locateMe = async () => {
+  locationAcquired.value = false;
+  try {
+    location.value = await getLocation();
+    locationAcquired.value = true;
+  } catch (e) {
+    locationAcquired.value = false;
+    console.log(e.message);
+  }
+};
 </script>

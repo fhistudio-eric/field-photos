@@ -11,10 +11,10 @@ if (isset($_POST['sessionName'])) {
 } else {
     $sessionName = "SKIPPED";
 }
-if (isset($_POST['sessionNameNoSapce'])) {
-    $sessionNameNoSapce = $_POST['sessionNameNoSapce'];
+if (isset($_POST['randomString'])) {
+    $randomString = $_POST['randomString'];
 } else {
-    $sessionNameNoSapce = "SKIPPED";
+    $randomString = "SKIPPED";
 }
 if (isset($_POST['userName'])) {
     $userName = $_POST['userName'];
@@ -41,6 +41,16 @@ if (isset($_POST['uploadTime'])) {
 } else {
     $uploadTime = "SKIPPED";
 }
+if (isset($_POST['lat'])) {
+    $lat = $_POST['lat'];
+} else {
+    $lat = "SKIPPED";
+}
+if (isset($_POST['lng'])) {
+    $lng = $_POST['lng'];
+} else {
+    $lng = "SKIPPED";
+}
 
 
 // // File name
@@ -56,7 +66,7 @@ $extension = pathinfo($filename, PATHINFO_EXTENSION);
 if (in_array(strtolower($extension), $valid_extensions)) {
 
     // Upload file
-    if (move_uploaded_file($_FILES['file']['tmp_name'], "../uploads/" .  $sessionNameNoSapce . "_" . $filename)) {
+    if (move_uploaded_file($_FILES['file']['tmp_name'], "../uploads/" .  $randomString . "_" . $filename)) {
         echo 1;
     } else {
         echo 0;
@@ -72,7 +82,9 @@ $statement = $dbh->prepare('INSERT INTO `fieldphotos`(
         sessionNotes,
         sessionDate,
         photoNotes,
-        uploadTime
+        uploadTime,
+        lat,
+        lng
     )VALUES (
         :fileName,
         :sessionName,
@@ -80,17 +92,21 @@ $statement = $dbh->prepare('INSERT INTO `fieldphotos`(
         :sessionNotes,
         :sessionDate,
         :photoNotes,
-        :uploadTime
+        :uploadTime,
+        :lat,
+        :lng
     )');
 
 $statement->execute([
-    'fileName' => $sessionNameNoSapce . "_" . $filename,
+    'fileName' => $randomString . "_" . $filename,
     'sessionName' => $sessionName,
     'userName' => $userName,
     'sessionNotes' => $sessionNotes,
     'sessionDate' => $sessionDate,
     'photoNotes' => $photoNotes,
-    'uploadTime' => $uploadTime
+    'uploadTime' => $uploadTime,
+    'lat' => $lat,
+    'lng' => $lng
 ]);
 
 
