@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 import Home from "../views/Home.vue";
 import PhotoUploader from "../views/PhotoUploader.vue";
+import Viewer from "../views/Viewer.vue";
 
 
 const routes = [
@@ -13,6 +14,10 @@ const routes = [
         path: "/photo",
         name: "PhotoUploader",
         component: PhotoUploader,
+    }, {
+        path: "/viewer",
+        name: "Viewer",
+        component: Viewer,
     },
 
 ];
