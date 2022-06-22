@@ -70,7 +70,7 @@
         class="flex justify-center items-center w-full h-full"
       >
         <label
-          for="image-file"
+          for="image_file"
           class="
             h-full
             w-full
@@ -88,7 +88,8 @@
             </p>
           </div>
           <input
-            id="image-file"
+            id="image_file"
+            ref="image_file"
             type="file"
             capture="camera"
             class="hidden"
@@ -173,6 +174,7 @@ import { onMounted, ref, watch } from "vue";
 import { defaultStore } from "../store";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+import heic2any from "heic2any";
 
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { CameraIcon } from "@heroicons/vue/outline";
@@ -198,11 +200,41 @@ const location = ref();
 const locationAcquired = ref(false);
 const lat = ref();
 const lng = ref();
+const image_file = ref();
 
-const setImage = (e) => {
+const setImage = async (e) => {
   photoFile.value = e.target.files[0];
   photoURL.value = URL.createObjectURL(photoFile.value);
+
+  var fileNameExt = photoFile.value.name.substr(
+    photoFile.value.name.lastIndexOf(".") + 1
+  );
+  if (fileNameExt == "HEIC") {
+    var blob = photoFile.value;
+    heic2any({
+      blob: blob,
+      toType: "image/jpg",
+    })
+      .then(function (resultBlob) {
+        photoURL.value = URL.createObjectURL(resultBlob);
+        //adding converted picture to the original <input type="file">
+        image_file.value = photoFile.value[0];
+        let container = new DataTransfer();
+        let file = new File([resultBlob], "convertedImage" + ".jpg", {
+          type: "image/jpeg",
+          lastModified: new Date().getTime(),
+        });
+        container.items.add(file);
+        image_file.value = container.files;
+        photoFile.value = image_file.value[0];
+      })
+      .catch(function (x) {
+        console.log(x.code);
+        console.log(x.message);
+      });
+  }
 };
+
 const retakePhoto = (e) => {
   photoURL.value = null;
 };
