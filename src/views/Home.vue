@@ -3,26 +3,43 @@
     class="
       bg-white
       h-full
-      p-4
       flex flex-col
       justify-between
       md:container md:mx-auto md:w-[360px]
+      relative
+      overflow-x-hidden
     "
   >
-    <div class="flex flex-col bg-white shadow-md rounded-sm p-4">
-      <div class="text-3xl font-extrabold mb-2 flex items-center">
-        <PhotographIcon class="text-gray-900 mr-1 w-10 h-10" />
-        <div
-          class="
-            font-extrabold
-            text-transparent text-4xl
-            bg-clip-text bg-gradient-to-r
-            from-blue-400
-            to-green-600
-          "
-        >
-          Field Photos
+    <div class="flex flex-col bg-white p-4">
+      <div
+        class="
+          text-3xl
+          font-extrabold
+          mb-2
+          pt-2
+          flex
+          items-center
+          justify-between
+        "
+      >
+        <div class="flex items-center">
+          <PhotographIcon class="text-gray-900 mr-1 w-10 h-10" />
+          <div
+            class="
+              font-extrabold
+              text-transparent text-4xl
+              bg-clip-text bg-gradient-to-r
+              from-blue-400
+              to-green-600
+            "
+          >
+            Field Photos
+          </div>
         </div>
+        <MenuIcon
+          class="text-gray-900 mr-1 w-8 h-8 cursor-pointer"
+          @click="showMenu"
+        />
       </div>
       <div class="text-lg font-bold">Your Name: *</div>
       <div class="w-full">
@@ -45,16 +62,16 @@
           v-if="sessionExists"
           class="bg-red-200 mt-1 flex flex-col shadow-md"
         >
-          <div class="mr-1 flex w-full font-bold bg-red-300 p-2">
+          <div class="mr-1 flex w-full font-bold bg-red-300 p-1">
             <ExclamationIcon class="text-gray-900 mr-1 w-6" />
-            <div>Warning</div>
+            <div>Warning - Session name exists</div>
           </div>
           <div class="p-3">
-            A session with this name already exists. You will be adding photos
-            to an existing session. Disregard if you were provided with a
-            session name.
+            You will be adding photos to an existing session.
           </div>
-          <div class="p-3 pt-1">To create a new session enter a new name.</div>
+          <div class="p-3 pt-0 italic">
+            * Disregard if you were provided with a session name.
+          </div>
         </div>
       </div>
       <div class="text-lg font-bold mt-2">Session notes:</div>
@@ -66,26 +83,7 @@
         ></textarea>
       </div>
     </div>
-    <div class="w-full h-full flex text-center flex-col justify-between">
-      <div></div>
-      <div>
-        <router-link
-          to="viewer"
-          class="
-            mb-6
-            text-gray-900
-            rounded-full
-            border border-gray-200
-            shadow-lg
-            p-2
-            px-6
-            hover:shadow-xl
-            transition-all
-            duration-300
-          "
-          >Photo Viewer</router-link
-        >
-      </div>
+    <div class="w-full h-full flex text-center flex-col justify-end p-4">
       <div>
         <span class="mb-4 text-gray-500">* required to begin</span>
         <router-link to="photo">
@@ -126,12 +124,23 @@ import { defaultStore } from "../store";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 
+import SideMenu from "../components/SideMenu.vue";
+
 import { PhotographIcon } from "@heroicons/vue/outline";
 import { ExclamationIcon } from "@heroicons/vue/outline";
+import { MenuIcon } from "@heroicons/vue/outline";
 
 const store = defaultStore();
 const router = useRouter();
 const route = useRoute();
+
+const menuShowing = ref(false);
+
+const emit = defineEmits(["showMenu"]);
+
+const showMenu = () => {
+  emit("showMenu");
+};
 
 onMounted(() => {
   store.sessionDate = new Date().toISOString().split("T")[0];
@@ -143,7 +152,10 @@ const begin = async () => {
   let formData = new FormData();
   formData.append("sessionName", store.sessionName);
 
-  // const response = await axios.post("https://www.fhistudio-apps.com/fieldphotos/php/checkSessionName.php", formData);
+  // const response = await axios.post(
+  //   "https://www.fhistudio-apps.com/fieldphotos/php/checkSessionName.php",
+  //   formData
+  // );
   const response = await axios.post("/php/checkSessionName.php", formData);
   if (response.data == "Found") {
     sessionExists.value = true;

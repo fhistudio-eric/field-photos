@@ -3,7 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import PhotoUploader from "../views/PhotoUploader.vue";
 import Viewer from "../views/Viewer.vue";
-
+import Help from "../views/Help.vue";
 
 const routes = [
     {
@@ -18,6 +18,10 @@ const routes = [
         path: "/viewer",
         name: "Viewer",
         component: Viewer,
+    }, {
+        path: "/help",
+        name: "Help",
+        component: Help,
     },
 
 ];

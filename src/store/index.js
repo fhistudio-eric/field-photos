@@ -11,11 +11,14 @@ export const defaultStore = defineStore("defaultStore", () => {
     const sessionNotes = ref(useStorage("sessionNotes", ""));
     const sessionDate = ref(useStorage("sessionDate", ""));
 
+    const currentView = ref(useStorage("currentView", "Home"));
+
 
     return {
         userName,
         sessionName,
         sessionNotes,
         sessionDate,
+        currentView
     }
 })

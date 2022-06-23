@@ -13,29 +13,17 @@
         absolute
         top-0
         w-full
-        p-2
         flex
         items-center
         justify-center
         transition-all
-        duration-300
+        duration-400
         z-50
       "
       :class="{ '-mt-20': uploadSuccess == false }"
     >
-      <div
-        class="p-2 px-8 rounded-full text-white text-2xl"
-        :class="{
-          'bg-green-600': uploadStatus == 'Success',
-          'bg-red-600': uploadStatus != 'Success',
-        }"
-      >
-        <div v-if="uploadStatus == 'Success'" class="flex items-center">
-          <BadgeCheckIcon class="h-8 w-8 text-white mr-1" />
-          <div>{{ uploadStatus }}</div>
-        </div>
-        <div v-else class="flex items-center">
-          <BadgeCheckIcon class="h-8 w-8 text-white mr-1" />
+      <div class="p-4 w-full text-white text-xl shadow-md" :class="status_bg">
+        <div class="flex items-center">
           <div>{{ uploadStatus }}</div>
         </div>
       </div>
@@ -48,19 +36,16 @@
         <ArrowLeftIcon class="h-4 w-4 text-white mr-1" /> Back</router-link
       >
       <div class="flex items-center justify-end text-right p-4">
-        <div v-if="locationAcquired == false" class="text-xs mr-1">
-          Getting Location
-        </div>
-        <div v-else class="text-xs mr-1">
+        <div v-if="locationAcquired == true" class="text-xs mr-1">
           {{ lat.toString().slice(0, 8) }},{{ lng.toString().slice(0, 8) }}
         </div>
-        <GlobeIcon
+        <GlobeAltIcon
           class="h-5 w-5"
           :class="{
             'text-green-500': locationAcquired == true,
             'text-red-500 animate-spin': locationAcquired == false,
           }"
-          @click="getLocation"
+          @click="locateMe"
         />
       </div>
     </div>
@@ -130,7 +115,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-white p-6 flex-grow flex flex-col justify-between">
+    <div class="bg-white p-4 flex-grow flex flex-col justify-between">
       <div class="flex flex-col flex-grow">
         <div class="text-lg font-bold mt-2">Notes:</div>
         <div class="w-full h-full flex-grow">
@@ -159,7 +144,7 @@
             rounded-sm
             disabled:opacity-50
           "
-          :disabled="photoURL == null ? true : false"
+          :disabled="uploadStatus == 'Ready for Upload' ? false : true"
           @click="locateMe"
         >
           Submit
@@ -179,14 +164,14 @@ import heic2any from "heic2any";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { CameraIcon } from "@heroicons/vue/outline";
 import { BadgeCheckIcon } from "@heroicons/vue/outline";
-import { GlobeIcon } from "@heroicons/vue/solid";
+import { GlobeAltIcon } from "@heroicons/vue/solid";
 
 const store = defaultStore();
 const router = useRouter();
 const route = useRoute();
 
 onMounted(() => {
-  locateMe();
+  locateMeInit();
 });
 
 const uploadTime = ref();
@@ -195,6 +180,7 @@ const photoURL = ref(null);
 const photoNotes = ref();
 const uploadSuccess = ref(false);
 const uploadStatus = ref("");
+const status_bg = ref("bg-transparent");
 const responsedata = ref();
 const location = ref();
 const locationAcquired = ref(false);
@@ -210,14 +196,18 @@ const setImage = async (e) => {
     photoFile.value.name.lastIndexOf(".") + 1
   );
   if (fileNameExt == "HEIC") {
+    uploadSuccess.value = true;
+    uploadStatus.value = "Adjusting Photo";
+    status_bg.value = "bg-blue-600";
+
     var blob = photoFile.value;
     heic2any({
       blob: blob,
       toType: "image/jpg",
+      quality: 0.5,
     })
       .then(function (resultBlob) {
         photoURL.value = URL.createObjectURL(resultBlob);
-        //adding converted picture to the original <input type="file">
         image_file.value = photoFile.value[0];
         let container = new DataTransfer();
         let file = new File([resultBlob], "convertedImage" + ".jpg", {
@@ -227,16 +217,27 @@ const setImage = async (e) => {
         container.items.add(file);
         image_file.value = container.files;
         photoFile.value = image_file.value[0];
+
+        uploadSuccess.value = true;
+        uploadStatus.value = "Ready for Upload";
+        status_bg.value = "bg-green-600";
       })
       .catch(function (x) {
         console.log(x.code);
         console.log(x.message);
       });
+  } else {
+    uploadSuccess.value = true;
+    uploadStatus.value = "Ready for Upload";
+    status_bg.value = "bg-green-600";
   }
 };
 
 const retakePhoto = (e) => {
   photoURL.value = null;
+  uploadSuccess.value = false;
+  uploadStatus.value = "";
+  status_bg.value = "bg-gray-900";
 };
 
 const makeid = (length) => {
@@ -280,20 +281,33 @@ const submitPhoto = async () => {
     )
     .then(function (response) {
       responsedata.value = response.data;
+
       if (!response.data) {
         alert("File not uploaded.");
+        console.log(responsedata.value);
+
         uploadSuccess.value = true;
-        uploadStatus.value = "Fail - Try Again";
+        uploadStatus.value = "Upload Failed. Try Again";
+        status_bg.value = "bg-red-600";
+
         setTimeout(() => {
           uploadSuccess.value = false;
-          // photoURL.value = null;
+          uploadStatus.value = "";
+          status_bg.value = "bg-gray-900";
         }, 3000);
       } else {
         // alert("File uploaded successfully.");
+        console.log(responsedata.value);
+
         uploadSuccess.value = true;
         uploadStatus.value = "Success";
+        status_bg.value = "bg-green-600";
+
         setTimeout(() => {
           uploadSuccess.value = false;
+          uploadStatus.value = "";
+          status_bg.value = "bg-gray-900";
+
           photoURL.value = null;
           photoNotes.value = "";
         }, 3000);
@@ -301,6 +315,7 @@ const submitPhoto = async () => {
     })
     .catch(function (error) {
       responsedata.value = error;
+      console.log(responsedata.value);
     });
 };
 
@@ -314,9 +329,7 @@ const getLocation = async () => {
       (pos) => {
         lat.value = pos.coords.latitude;
         lng.value = pos.coords.longitude;
-        if (photoURL.value != null) {
-          submitPhoto();
-        }
+
         resolve(pos);
       },
       (err) => {
@@ -329,6 +342,27 @@ const getLocation = async () => {
 
 const locateMe = async () => {
   locationAcquired.value = false;
+  uploadSuccess.value = true;
+  uploadStatus.value = "Getting your location";
+  status_bg.value = "bg-gray-900";
+
+  try {
+    location.value = await getLocation();
+
+    uploadSuccess.value = true;
+    uploadStatus.value = "Location Aquired. Uploading...";
+    status_bg.value = "bg-gray-900";
+
+    submitPhoto();
+
+    locationAcquired.value = true;
+  } catch (e) {
+    locationAcquired.value = false;
+    console.log(e.message);
+  }
+};
+
+const locateMeInit = async () => {
   try {
     location.value = await getLocation();
     locationAcquired.value = true;
