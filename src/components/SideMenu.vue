@@ -35,30 +35,78 @@
     <div class="w-full mt-2 p-4 flex-grow flex flex-col justify-between">
       <div class="flex flex-col items-start">
         <button
-          class="text-3xl mb-3 hover:translate-x-2 duration-300 transition-all"
-          :class="{ underline: store.currentView == '/' }"
+          class="
+            text-3xl
+            mb-2
+            hover:bg-blue-400
+            duration-300
+            transition-all
+            w-full
+            text-left
+            p-2
+            rounded-md
+            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            flex
+            items-center
+          "
+          :class="{
+            'bg-blue-400 border-b-2 ': store.currentView == '/',
+          }"
           @click="navigateTo('/')"
         >
+          <HomeIcon class="text-gray-900 w-8 h-8 mr-2" />
           Home
         </button>
         <button
-          class="text-3xl mb-3 hover:translate-x-2 duration-300 transition-all"
-          :class="{ underline: store.currentView == 'Viewer' }"
+          class="
+            text-3xl
+            mb-2
+            hover:bg-blue-400
+            duration-300
+            transition-all
+            w-full
+            text-left
+            p-2
+            rounded-md
+            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            flex
+          "
+          :class="{
+            'bg-blue-400 border-b-2 ': store.currentView == 'Viewer',
+          }"
           @click="navigateTo('Viewer')"
         >
+          <ViewGridIcon class="text-gray-900 w-8 h-8 mr-2" />
+
           Photo Viewer
         </button>
         <button
-          class="text-3xl mb-3 hover:translate-x-2 duration-300 transition-all"
-          :class="{ underline: store.currentView == 'help' }"
+          class="
+            text-3xl
+            mb-2
+            hover:bg-blue-400
+            duration-300
+            transition-all
+            w-full
+            text-left
+            p-2
+            rounded-md
+            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            flex
+          "
+          :class="{
+            'bg-blue-400 border-b-2 ': store.currentView == 'help',
+          }"
           @click="navigateTo('help')"
         >
+          <QuestionMarkCircleIcon class="text-gray-900 w-8 h-8 mr-2" />
+
           About & Help
         </button>
       </div>
       <div class="flex w-full items-center justify-center">
         <img src="../assets/logo_blue.png" class="w-8 mr-2" />
-        <span class="font-bold">Created by FHI Studio </span>
+        <span class="font-extralight">Created by FHI Studio </span>
       </div>
     </div>
   </div>
@@ -71,6 +119,9 @@ import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 
 import { XIcon } from "@heroicons/vue/outline";
+import { HomeIcon } from "@heroicons/vue/outline";
+import { ViewGridIcon } from "@heroicons/vue/outline";
+import { QuestionMarkCircleIcon } from "@heroicons/vue/outline";
 
 const store = defaultStore();
 const router = useRouter();

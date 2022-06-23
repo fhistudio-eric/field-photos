@@ -185,7 +185,7 @@
           class="
             font-extralight
             text-center
-            mt-20
+            mt-52
             text-transparent text-4xl
             bg-clip-text bg-gradient-to-r
             from-blue-400

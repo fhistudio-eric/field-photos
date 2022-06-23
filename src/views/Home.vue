@@ -22,7 +22,7 @@
           justify-between
         "
       >
-        <div class="flex items-center">
+        <div class="flex justify-between items-center">
           <PhotographIcon class="text-gray-900 mr-1 w-10 h-10" />
           <div
             class="
@@ -46,6 +46,7 @@
         <input
           type="text"
           class="w-full border border-gray-500 p-2 rounded-sm"
+          placeholder="Enter your name"
           v-model="store.userName"
         />
       </div>
@@ -54,7 +55,7 @@
         <input
           type="text"
           class="w-full border border-gray-500 p-2 rounded-sm"
-          placeholder="Enter session ID or something new"
+          placeholder="Enter a session ID"
           v-model="store.sessionName"
           @focusout="begin"
         />
@@ -79,8 +80,11 @@
         <textarea
           class="w-full border border-gray-500 p-2 h-32 rounded-sm resize-none"
           v-model="store.sessionNotes"
-          placeholder="provide some notes about your session (purpose, weather, etc.)"
+          placeholder="Provide some notes about your session (purpose, weather, etc.)"
         ></textarea>
+      </div>
+      <div class="flex w-full justify-start items-start">
+        <button class="p-1 bg-gray-100" @click="clear">clear</button>
       </div>
     </div>
     <div class="w-full h-full flex text-center flex-col justify-end p-4">
@@ -140,6 +144,11 @@ const emit = defineEmits(["showMenu"]);
 
 const showMenu = () => {
   emit("showMenu");
+};
+const clear = () => {
+  store.userName = null;
+  store.sessionName = null;
+  store.sessionNotes = null;
 };
 
 onMounted(() => {

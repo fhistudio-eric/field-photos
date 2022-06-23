@@ -41,7 +41,6 @@
           @click="showMenu"
         />
       </div>
-      <div class="text-lg font-bold">Load Photos by Session Name</div>
       <div class="w-full flex flex-row">
         <input
           type="text"
@@ -49,8 +48,11 @@
           v-model="sessionName"
           placeholder="enter your session name here"
         />
-        <button class="p-2 border border-gray-900 ml-1" @click="load">
-          Load
+        <button
+          class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
+          @click="load"
+        >
+          <SearchIcon class="mr-1 w-4 h-4 font-extrabold" />
         </button>
       </div>
     </div>
@@ -66,6 +68,24 @@
         pb-10
       "
     >
+      <div
+        v-if="noPhotosFound == null"
+        class="
+          p-2
+          flex
+          items-center
+          flex-col flex-grow
+          justify-center
+          font-extrabold
+          text-transparent text-4xl
+          bg-clip-text bg-gradient-to-br
+          from-blue-400
+          to-green-600
+        "
+      >
+        <SearchIcon class="mr-1 w-10 h-10 text-yellow-500" />
+        Search for a session above
+      </div>
       <div
         v-if="noPhotosFound == true"
         class="p-2 shadow-md rounded-md mt-6 flex items-center flex-col"
@@ -114,6 +134,9 @@
               items-center
               justify-center
               bg-black
+              hover:scale-105 hover:shadow-md hover:shadow-gray-500
+              transition-all
+              duration-300
             "
             @click="zoomPhoto(photo)"
           >
@@ -178,13 +201,14 @@ import { PhotographIcon } from "@heroicons/vue/outline";
 import { CubeTransparentIcon } from "@heroicons/vue/outline";
 import { MenuIcon } from "@heroicons/vue/outline";
 import { XIcon } from "@heroicons/vue/outline";
+import { SearchIcon } from "@heroicons/vue/outline";
 
 const store = defaultStore();
 const router = useRouter();
 const route = useRoute();
 
 const sessionName = ref();
-const noPhotosFound = ref();
+const noPhotosFound = ref(null);
 const photos = ref();
 
 const menuShowing = ref(false);
