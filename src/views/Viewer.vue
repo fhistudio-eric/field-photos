@@ -79,7 +79,7 @@
       <div v-else class="grid grid-cols-3 gap-1">
         <GoogleMap
           v-if="noPhotosFound == false"
-          api-key="AIzaSyAI0ph3MZmaDZ8Op7mf1HEljmylvyOJQz8"
+          :api-key="pk"
           class="col-span-3 h-52"
           :center="center"
           :zoom="7"
@@ -193,6 +193,7 @@ const selectedPhoto = ref({});
 
 //MAP
 const center = ref({ lat: 41.7679044, lng: -72.751958 });
+const pk = import.meta.env.VITE_MAPKEY;
 
 const pLocation = ref({});
 
