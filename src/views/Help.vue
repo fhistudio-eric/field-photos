@@ -42,10 +42,22 @@
         <MenuIcon
           class="text-gray-900 mr-1 w-8 h-8 cursor-pointer"
           @click="showMenu"
+          p-2
         />
       </div>
       <div class="pb-10">
-        <div class="font-bold text-2xl mt-2 sticky top-12 bg-gray-100">
+        <div
+          class="
+            font-bold
+            text-2xl
+            mt-2
+            sticky
+            top-12
+            bg-gray-100
+            p-2
+            shadow-md
+          "
+        >
           About
         </div>
 
@@ -53,8 +65,8 @@
           What is this tool for?
         </div>
         <p class="text-gray-800">
-          This is a tool used to collect photos in the field and create collections
-          by sessions.
+          This is a tool used to collect photos in the field and create
+          collections by sessions.
         </p>
         <div class="font-bold mt-2 text-green-700 underline">
           What are some use cases?
@@ -72,8 +84,8 @@
         </div>
         <p class="text-gray-800">
           A session is a unique name allowing photos to be grouped. You can
-          create a unique session name and keep to secret for yourself and or
-          share it with others so you can all add photos to the same session.
+          create a unique session name and keep it secret for yourself or share
+          it with others so you can all add photos to the same session.
         </p>
         <div class="font-bold mt-2 text-green-700 underline">
           Are the photos private?
@@ -91,48 +103,64 @@
           you when tap submit to upload a photo.
         </p>
 
-        <div class="font-bold text-2xl mt-2 sticky top-12 bg-gray-100">
+        <div
+          class="
+            font-bold
+            text-2xl
+            mt-2
+            sticky
+            top-12
+            bg-gray-100
+            p-2
+            shadow-md
+          "
+        >
           Help
         </div>
 
         <div class="font-bold mt-2 text-green-700 underline">
           How do I start?
         </div>
-        <p class="text-gray-800">
-          To start enter you name, session name, and optionally session notes.
-          <br />
-          <br />
-          Your name and session name are required to ensure photos get to the
-          correct group and help figure out who took the photo.
-          <br />
-          <br />
-          You may have been given a session name by a group organizer. If so,
-          enter that to add your photos to the groups.
-          <br />
-          <br />
-          Session notes help give an idea of the session purpose and can be
-          helpful when reviewing photos later.
-        </p>
+        <div class="text-gray-800">
+          <ul class="list-disc ml-6">
+            <li>
+              To start enter you name, session name, and optionally session
+              notes.
+            </li>
+            <li>
+              Your name and session name are required to ensure photos get to
+              thecorrect group and help figure out who took the photo.
+            </li>
+            <li>
+              You may have been given a session name by a group organizer. If
+              so,enter that to add your photos to the groups.
+            </li>
+            <li>
+              Session notes help give an idea of the session purpose and can
+              behelpful when reviewing photos later.
+            </li>
+          </ul>
+        </div>
         <div class="font-bold mt-2 text-green-700 underline">
           Taking a photo
         </div>
-        <p class="text-gray-800">
-          When ready, tap the gray camera button to open the camera on your
-          device.
-          <br />
-          <br />
-          Take your photo. You can retake your photo if needed.
-          <br />
-          <br />
-          Add some notes to the photo to give some context of what or why.
-          <br />
-          <br />
-          Tap submit. The tool will quickly grab your location and upload the
-          photo.
-          <br />
-          <br />
-          Once uploaded you are ready for another!
-        </p>
+        <div class="text-gray-800">
+          <ul class="list-disc ml-6">
+            <li>
+              When ready, tap the gray camera button to open the camera on your
+              device.
+            </li>
+            <li>Take your photo. You can retake your photo if needed.</li>
+            <li>
+              Add some notes to the photo to give some context of what or why.
+            </li>
+            <li>
+              Tap submit. The tool will quickly grab your location and upload
+              the photo.
+            </li>
+            <li>Once uploaded you are ready for another!</li>
+          </ul>
+        </div>
 
         <div class="font-bold mt-2 text-green-700 underline">
           How do I view the photos?
@@ -140,6 +168,17 @@
         <p class="text-gray-800">
           Go to the Photo Viewer page and enter in your session name. This will
           load all of the information and photos from that session.
+        </p>
+        <div class="font-bold mt-2 text-green-700 underline">
+          My photo is taking a long time to upload. Why?
+        </div>
+        <p class="text-gray-800">
+          Upload time depends on two main factors, data speeds and image size.
+          If you are on a slow cellular connection it may take longer. If your
+          image is large it may also take longer. The tool does it's best to
+          compress and optimize large iPhone images to reduce upload times.
+          iPhone images are a special format at require a few adjustments before
+          than can be uploaded.
         </p>
 
         <div
