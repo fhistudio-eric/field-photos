@@ -5,6 +5,8 @@ import { ref } from "vue";
 export const defaultStore = defineStore("defaultStore", () => {
 
 
+    const host = ref(useStorage("host", ""));
+
     const userName = ref(useStorage("userName", ""));
 
     const sessionName = ref(useStorage("sessionName", ""));
@@ -15,6 +17,7 @@ export const defaultStore = defineStore("defaultStore", () => {
 
 
     return {
+        host,
         userName,
         sessionName,
         sessionNotes,

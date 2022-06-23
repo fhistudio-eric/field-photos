@@ -267,18 +267,19 @@ const submitPhoto = async () => {
   formData.append("uploadTime", new Date().toLocaleTimeString());
   formData.append("lat", lat.value);
   formData.append("lng", lng.value);
+  var URL;
+  if (store.host == "www.fhistudio-apps.com") {
+    URL = "https://www.fhistudio-apps.com/fieldphotos/php/upload.php";
+  } else {
+    URL = "/php/upload.php";
+  }
 
   const response = await axios
-    .post(
-      "/php/upload.php",
-      // "https://www.fhistudio-apps.com/fieldphotos/php/upload.php",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
+    .post(URL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then(function (response) {
       responsedata.value = response.data;
 

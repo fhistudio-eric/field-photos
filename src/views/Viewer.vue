@@ -77,22 +77,60 @@
       </div>
 
       <div v-else class="grid grid-cols-3 gap-1">
+        <GoogleMap
+          v-if="noPhotosFound == false"
+          api-key="AIzaSyAI0ph3MZmaDZ8Op7mf1HEljmylvyOJQz8"
+          class="col-span-3 h-52"
+          :center="center"
+          :zoom="7"
+          :disableDefaultUi="true"
+        >
+          <Marker
+            v-for="location in pLocation"
+            :key="location"
+            :options="{ position: location.center }"
+          >
+            <InfoWindow
+              v-for="location in pLocation"
+              :key="location"
+              :options="{ position: location.center }"
+            >
+              <img
+                :src="
+                  'https://www.fhistudio-apps.com/fieldphotos/uploads/' +
+                  location.fileName
+                "
+                class="w-32"
+            /></InfoWindow>
+          </Marker>
+        </GoogleMap>
         <div v-for="photo in photos" :key="photo.id">
-          <div class="col-span-1" @click="zoomPhoto(photo)">
+          <button
+            class="
+              col-span-1
+              h-28
+              overflow-hidden
+              flex
+              items-center
+              justify-center
+              bg-black
+            "
+            @click="zoomPhoto(photo)"
+          >
             <img
               :src="
                 'https://www.fhistudio-apps.com/fieldphotos/uploads/' +
                 photo.fileName
               "
             />
-          </div>
+          </button>
         </div>
       </div>
     </div>
 
     <div
       v-if="zoomShowing"
-      class="absolute bg-white/50 backdrop-blur-md h-full w-full p-4"
+      class="absolute bg-white/70 backdrop-blur-lg h-full w-full p-4"
     >
       <div class="w-full flex justify-end mb-2">
         <XIcon
@@ -109,9 +147,19 @@
             "
           />
         </div>
-        <div class="font-bold">Notes:</div>
+        <div class="font-bold mt-2">Notes:</div>
         <div class="italic">{{ selectedPhoto.photoNotes }}</div>
-        {{ selectedPhoto }}
+        <div class="font-bold">Upload Time:</div>
+        <div class="italic">
+          {{ selectedPhoto.sessionDate.toString().slice(5, 7) }}/{{
+            selectedPhoto.sessionDate.toString().slice(8, 10)
+          }}/{{ selectedPhoto.sessionDate.toString().slice(0, 4) }} at
+          {{ selectedPhoto.uploadTime }}
+        </div>
+        <div class="font-bold mt-2">Location:</div>
+        <div class="italic">
+          {{ selectedPhoto.lat }},{{ selectedPhoto.lng }}
+        </div>
       </div>
     </div>
   </div>
@@ -122,6 +170,9 @@ import { onMounted, ref, watch } from "vue";
 import { defaultStore } from "../store";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+
+import { defineComponent } from "vue";
+import { GoogleMap, Marker, InfoWindow } from "vue3-google-map";
 
 import { PhotographIcon } from "@heroicons/vue/outline";
 import { CubeTransparentIcon } from "@heroicons/vue/outline";
@@ -136,11 +187,14 @@ const sessionName = ref();
 const noPhotosFound = ref();
 const photos = ref();
 
-onMounted(async () => {});
-
 const menuShowing = ref(false);
 const zoomShowing = ref(false);
 const selectedPhoto = ref({});
+
+//MAP
+const center = ref({ lat: 41.7679044, lng: -72.751958 });
+
+const pLocation = ref({});
 
 const emit = defineEmits(["showMenu"]);
 
@@ -152,17 +206,34 @@ const zoomPhoto = (photo) => {
   selectedPhoto.value = photo;
 };
 
+var response;
 const load = async () => {
+  selectedPhoto.value = {};
   photos.value = null;
   let formData = new FormData();
   formData.append("sessionName", sessionName.value);
+  if (store.host == "www.fhistudio-apps.com") {
+    response = await axios.post(
+      "https://www.fhistudio-apps.com/fieldphotos/php/loadPhotosBySession.php",
+      formData
+    );
+  } else {
+    response = await axios.post("/php/loadPhotosBySession.php", formData);
+  }
 
-  const response = await axios.post("/php/loadPhotosBySession.php", formData);
-  // const response = await axios.post(
-  //   "https://www.fhistudio-apps.com/fieldphotos/php/loadPhotosBySession.php",
-  //   formData
-  // );
   photos.value = response.data;
+
+  for (const [key, value] of Object.entries(response.data)) {
+    var latitude = parseFloat(value.lat);
+    var longitude = parseFloat(value.lng);
+
+    var photoObj = {
+      center: { lat: latitude, lng: longitude },
+      fileName: value.fileName,
+    };
+    pLocation.value = { ...pLocation.value, ["COOL" + value.id]: photoObj };
+  }
+
   if (photos.value == "NONE") {
     noPhotosFound.value = true;
   } else {

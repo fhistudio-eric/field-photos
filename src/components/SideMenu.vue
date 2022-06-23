@@ -2,7 +2,7 @@
   <div
     class="
       bg-white/50
-      backdrop-blur-md
+      backdrop-blur-lg
       h-full
       w-full
       absolute

@@ -53,7 +53,7 @@
           What is this tool for?
         </div>
         <p class="text-gray-800">
-          This is a tool to collect photos in the field and create collections
+          This is a tool used to collect photos in the field and create collections
           by sessions.
         </p>
         <div class="font-bold mt-2 text-green-700 underline">
@@ -187,23 +187,5 @@ const emit = defineEmits(["showMenu"]);
 
 const showMenu = () => {
   emit("showMenu");
-};
-
-const load = async () => {
-  photos.value = null;
-  let formData = new FormData();
-  formData.append("sessionName", sessionName.value);
-
-  const response = await axios.post("/php/loadPhotosBySession.php", formData);
-  // const response = await axios.post(
-  //   "https://www.fhistudio-apps.com/fieldphotos/php/loadPhotosBySession.php",
-  //   formData
-  // );
-  photos.value = response.data;
-  if (photos.value == "NONE") {
-    noPhotosFound.value = true;
-  } else {
-    noPhotosFound.value = false;
-  }
 };
 </script>

@@ -144,19 +144,25 @@ const showMenu = () => {
 
 onMounted(() => {
   store.sessionDate = new Date().toISOString().split("T")[0];
+  store.host = window.location.host;
 });
 
 const sessionExists = ref(false);
+var response;
 
 const begin = async () => {
   let formData = new FormData();
   formData.append("sessionName", store.sessionName);
 
-  // const response = await axios.post(
-  //   "https://www.fhistudio-apps.com/fieldphotos/php/checkSessionName.php",
-  //   formData
-  // );
-  const response = await axios.post("/php/checkSessionName.php", formData);
+  if (store.host == "www.fhistudio-apps.com") {
+    response = await axios.post(
+      "https://www.fhistudio-apps.com/fieldphotos/php/checkSessionName.php",
+      formData
+    );
+  } else {
+    response = await axios.post("/php/checkSessionName.php", formData);
+  }
+
   if (response.data == "Found") {
     sessionExists.value = true;
   } else {

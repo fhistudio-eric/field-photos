@@ -14,7 +14,8 @@
     "heic2any": "^0.0.3",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.16"
+    "vue-router": "^4.0.16",
+    "vue3-google-map": "^0.13.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
