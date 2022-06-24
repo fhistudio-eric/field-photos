@@ -111,9 +111,7 @@
             :options="{ position: location.center }"
           >
             <InfoWindow
-              v-for="location in pLocation"
-              :key="location"
-              :options="{ position: location.center }"
+           
             >
               <img
                 :src="
