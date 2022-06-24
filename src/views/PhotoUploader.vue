@@ -205,7 +205,7 @@ const setImage = async (e) => {
     heic2any({
       blob: blob,
       toType: "image/jpg",
-      quality: 0.5,
+      quality: 0.4,
     })
       .then(function (resultBlob) {
         photoURL.value = URL.createObjectURL(resultBlob);
@@ -228,6 +228,27 @@ const setImage = async (e) => {
         console.log(x.message);
       });
   } else {
+    var f = photoFile.value;
+    var fileName = f.name.split(".")[0];
+    var img = new Image();
+    img.src = photoURL.value;
+    img.onload = function () {
+      var canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob(
+        function (blob) {
+          console.info(blob.size);
+          var f2 = new File([blob], fileName + ".jpeg");
+          photoFile.value = f2;
+        },
+        "image/jpeg",
+        0.4
+      );
+    };
+
     uploadSuccess.value = true;
     uploadStatus.value = "Ready for Upload";
     status_bg.value = "bg-green-600";
