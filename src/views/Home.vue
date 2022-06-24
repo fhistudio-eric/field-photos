@@ -67,7 +67,7 @@
             <ExclamationIcon class="text-gray-900 mr-1 w-6" />
             <div>Warning - Session name exists</div>
           </div>
-          <div class="p-3">
+          <div class="px-3 py-1">
             You will be adding photos to an existing session.
             <span class="italic">
               Disregard if you were provided with a session name.
@@ -84,7 +84,9 @@
         ></textarea>
       </div>
       <div class="flex w-full justify-start items-start">
-        <button class="p-1 bg-gray-100" @click="clear">clear</button>
+        <button class="p-1 px-2 bg-white shadow-md rounded-full" @click="clear">
+          clear
+        </button>
       </div>
     </div>
     <div class="w-full h-full flex text-center flex-col justify-end p-4">

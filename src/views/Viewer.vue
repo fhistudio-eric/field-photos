@@ -72,9 +72,10 @@
         v-if="noPhotosFound == null"
         class="
           p-2
+          mt-6
           flex
           items-center
-          flex-col flex-grow
+          flex-col
           justify-center
           font-extrabold
           text-transparent text-4xl
@@ -88,7 +89,18 @@
       </div>
       <div
         v-if="noPhotosFound == true"
-        class="p-2 shadow-md rounded-md mt-6 flex items-center flex-col"
+        class="
+          p-2
+          mt-6
+          flex
+          items-center
+          flex-col
+          font-extrabold
+          text-transparent text-4xl
+          bg-clip-text bg-gradient-to-br
+          from-blue-400
+          to-green-600
+        "
       >
         <CubeTransparentIcon
           class="text-gray-900 mr-1 w-10 h-10 animate-bounce"

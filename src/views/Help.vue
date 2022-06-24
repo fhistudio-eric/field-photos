@@ -111,12 +111,12 @@
           feature may come in the future.
         </p>
         <div class="font-bold mt-2 text-green-700 underline">
-          Are the images modiefied?
+          Are the images modified?
         </div>
         <p class="text-gray-800">
-          The content of the image is not modified. The image is compressed for
-          upload and storage puposes.The highest resulution is retained while
-          reducing image size.
+          The content of the image is not modified. The image file is compressed
+          for upload and storage purposes. The highest resolution is retained
+          while reducing image size.
         </p>
 
         <div
