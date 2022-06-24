@@ -11,7 +11,7 @@
       flex flex-col
       z-50
     "
-    :class="{ '-ml-[420px]': menuShowing == false }"
+    :class="{ '-ml-[690px] ': menuShowing == false }"
   >
     <div class="flex justify-between items-center p-4">
       <div
@@ -45,7 +45,6 @@
             text-left
             p-2
             rounded-md
-            
             flex
             items-center
           "
@@ -68,7 +67,6 @@
             text-left
             p-2
             rounded-md
-            
             flex
           "
           :class="{
@@ -91,7 +89,6 @@
             text-left
             p-2
             rounded-md
-            
             flex
           "
           :class="{

@@ -3,7 +3,7 @@
     class="
       flex flex-col
       h-full
-      overflow-hidden
+      overflow-scroll
       relative
       md:container md:mx-auto md:w-[360px]
     "
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-gray-900 p-0 text-white flex justify-between">
+    <div class="bg-gray-900 p-0 text-white flex justify-between sticky top-0">
       <router-link
         to="/"
         class="flex items-center bg-gray-900 hover:bg-gray-800 p-4"

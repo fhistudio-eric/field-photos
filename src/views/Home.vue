@@ -20,6 +20,8 @@
           flex
           items-center
           justify-between
+          sticky top-0
+          bg-white
         "
       >
         <div class="flex justify-between items-center">
