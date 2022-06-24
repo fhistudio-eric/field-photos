@@ -45,7 +45,7 @@
             text-left
             p-2
             rounded-md
-            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            
             flex
             items-center
           "
@@ -68,7 +68,7 @@
             text-left
             p-2
             rounded-md
-            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            
             flex
           "
           :class="{
@@ -91,7 +91,7 @@
             text-left
             p-2
             rounded-md
-            hover:shadow-md hover:shadow-gray-500 hover:-translate-y-1
+            
             flex
           "
           :class="{

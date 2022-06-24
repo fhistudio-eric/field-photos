@@ -17,7 +17,7 @@
         items-center
         justify-center
         transition-all
-        duration-400
+        duration-700
         z-50
       "
       :class="{ '-mt-20': uploadSuccess == false }"
@@ -86,6 +86,7 @@
         v-else
         class="
           w-full
+          h-full
           flex flex-col
           justify-center
           items-center
@@ -110,21 +111,21 @@
         >
           Retake Photo
         </button>
-        <div class="h-full p-2 bg-white shadow-md shadow-blue-200">
-          <img :src="photoURL" class="max-h-[340px]" />
+        <div class="h-full shadow-blue-200 overflow-scroll">
+          <img :src="photoURL" class="" />
         </div>
       </div>
     </div>
     <div class="bg-white p-4 flex-grow flex flex-col justify-between">
       <div class="flex flex-col flex-grow">
-        <div class="text-lg font-bold mt-2">Notes:</div>
+        <div class="text-lg font-bold mt-0">Notes:</div>
         <div class="w-full h-full flex-grow">
           <textarea
             class="
               w-full
               border border-gray-500
               p-2
-              h-5/6
+              h-24
               rounded-sm
               resize-none
             "
