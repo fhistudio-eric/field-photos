@@ -8,6 +8,7 @@ error_reporting(E_ALL);
 
 if (isset($_POST['sessionName'])) {
     $sessionName = $_POST['sessionName'];
+    $sessionNameNoSpace = preg_replace('/\s+/', '', $sessionName);;
 } else {
     $sessionName = "SKIPPED";
 }
@@ -18,6 +19,7 @@ if (isset($_POST['randomString'])) {
 }
 if (isset($_POST['userName'])) {
     $userName = $_POST['userName'];
+    $userNameNoSpace = preg_replace('/\s+/', '', $userName);;
 } else {
     $userName = "SKIPPED";
 }
@@ -62,11 +64,13 @@ $valid_extensions = array("jpg", "jpeg", "png", "heic");
 // File extension
 $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
+$fullFileName = $sessionNameNoSpace . "_" . $userNameNoSpace . "_" . $randomString  . "." . $extension;
+
 // Check extension
 if (in_array(strtolower($extension), $valid_extensions)) {
 
     // Upload file
-    if (move_uploaded_file($_FILES['file']['tmp_name'], "../uploads/" .  $randomString . "_" . $filename)) {
+    if (move_uploaded_file($_FILES['file']['tmp_name'], "../uploads/" .  $fullFileName)) {
         echo 1;
     } else {
         echo 0;
@@ -98,7 +102,7 @@ $statement = $dbh->prepare('INSERT INTO `fieldphotos`(
     )');
 
 $statement->execute([
-    'fileName' => $randomString . "_" . $filename,
+    'fileName' => $fullFileName,
     'sessionName' => $sessionName,
     'userName' => $userName,
     'sessionNotes' => $sessionNotes,
