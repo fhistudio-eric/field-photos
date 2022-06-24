@@ -110,9 +110,7 @@
             :key="location"
             :options="{ position: location.center }"
           >
-            <InfoWindow
-           
-            >
+            <InfoWindow>
               <img
                 :src="
                   'https://www.fhistudio-apps.com/fieldphotos/uploads/' +
@@ -155,7 +153,19 @@
     >
       <div class="w-full flex justify-end mb-2">
         <XIcon
-          class="text-gray-900 w-8 h-8 mt-0 mr-0 cursor-pointer"
+          class="
+            text-gray-900
+            w-10
+            h-10
+            mt-0
+            mr-0
+            cursor-pointer
+            absolute
+            bg-white
+            p-2
+            rounded-full
+            border border-green-600
+          "
           @click="zoomPhoto(null)"
         />
       </div>
