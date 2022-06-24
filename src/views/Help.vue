@@ -84,8 +84,8 @@
         </div>
         <p class="text-gray-800">
           A session is a unique name allowing photos to be grouped. You can
-          create a unique session name and keep it secret for yourself or share
-          it with others so you can all add photos to the same session.
+          create a unique session name and keep it secret or share it with
+          others so you can all add photos to the same session.
         </p>
         <div class="font-bold mt-2 text-green-700 underline">
           Are the photos private?
@@ -99,8 +99,15 @@
         </div>
         <p class="text-gray-800">
           Yes and no. The tool grabs your location each time you upload a photo
-          using the phones GPS. It is not tracking you at all times, only when
-          you when tap submit to upload a photo.
+          using the GPS on the device. It is not tracking you at all times, only
+          when you when tap submit to upload a photo.
+        </p>
+        <div class="font-bold mt-2 text-green-700 underline">
+          Why can't I choose a photo from my library?
+        </div>
+        <p class="text-gray-800">
+          This tool is currently meant for in the moment documenting. This
+          feature may come in the future.
         </p>
 
         <div
@@ -128,16 +135,16 @@
               notes.
             </li>
             <li>
-              Your name and session name are required to ensure photos get to
-              thecorrect group and help figure out who took the photo.
+              Your name and session name are required to ensure photos get
+              grouped and help figure out who took the photo.
             </li>
             <li>
               You may have been given a session name by a group organizer. If
               so,enter that to add your photos to the groups.
             </li>
             <li>
-              Session notes help give an idea of the session purpose and can
-              behelpful when reviewing photos later.
+              Session notes help give an idea of the session purpose and can be
+              helpful when reviewing photos later.
             </li>
           </ul>
         </div>
@@ -180,13 +187,23 @@
           iPhone images are a special format at require a few adjustments before
           than can be uploaded.
         </p>
+        <div class="font-bold mt-2 text-green-700 underline">
+          What if I forget my Session Name?
+        </div>
+        <p class="text-gray-800">
+          Email
+          <a href="mailto:webdev@fhistudio.com" class="text-green-600"
+            >support</a
+          >
+          with details.
+        </p>
 
         <div
           class="
             font-extralight
             text-center
             mt-52
-            text-transparent text-4xl
+            text-transparent text-xs
             bg-clip-text bg-gradient-to-r
             from-blue-400
             to-green-600

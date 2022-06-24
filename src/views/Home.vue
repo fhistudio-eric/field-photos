@@ -69,16 +69,16 @@
           </div>
           <div class="p-3">
             You will be adding photos to an existing session.
-          </div>
-          <div class="p-3 pt-0 italic">
-            * Disregard if you were provided with a session name.
+            <span class="italic">
+              Disregard if you were provided with a session name.
+            </span>
           </div>
         </div>
       </div>
       <div class="text-lg font-bold mt-2">Session notes:</div>
       <div class="w-full">
         <textarea
-          class="w-full border border-gray-500 p-2 h-32 rounded-sm resize-none"
+          class="w-full border border-gray-500 p-2 h-24 rounded-sm resize-none"
           v-model="store.sessionNotes"
           placeholder="Provide some notes about your session (purpose, weather, etc.)"
         ></textarea>
