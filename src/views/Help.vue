@@ -56,6 +56,7 @@
             bg-gray-100
             p-2
             shadow-md
+            text-green-700
           "
         >
           About
@@ -109,17 +110,26 @@
           This tool is currently meant for in the moment documenting. This
           feature may come in the future.
         </p>
+        <div class="font-bold mt-2 text-green-700 underline">
+          Are the images modiefied?
+        </div>
+        <p class="text-gray-800">
+          The content of the image is not modified. The image is compressed for
+          upload and storage puposes.The highest resulution is retained while
+          reducing image size.
+        </p>
 
         <div
           class="
             font-bold
             text-2xl
-            mt-2
+            mt-6
             sticky
             top-12
             bg-gray-100
             p-2
             shadow-md
+            text-green-700
           "
         >
           Help
@@ -195,7 +205,7 @@
           <a href="mailto:webdev@fhistudio.com" class="text-green-600"
             >support</a
           >
-          with details.
+          with details about your session.
         </p>
 
         <div
