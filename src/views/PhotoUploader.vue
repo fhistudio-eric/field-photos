@@ -196,6 +196,7 @@ const setImage = async (e) => {
   var fileNameExt = photoFile.value.name.substr(
     photoFile.value.name.lastIndexOf(".") + 1
   );
+
   if (fileNameExt == "HEIC") {
     uploadSuccess.value = true;
     uploadStatus.value = "Adjusting Photo";
@@ -289,6 +290,7 @@ const submitPhoto = async () => {
   formData.append("uploadTime", new Date().toLocaleTimeString());
   formData.append("lat", lat.value);
   formData.append("lng", lng.value);
+
   var URL;
   if (store.host == "www.fhistudio-apps.com") {
     URL = "https://www.fhistudio-apps.com/fieldphotos/php/upload.php";
@@ -306,7 +308,6 @@ const submitPhoto = async () => {
       responsedata.value = response.data;
 
       if (!response.data) {
-        alert("File not uploaded.");
         console.log(responsedata.value);
 
         uploadSuccess.value = true;
@@ -319,7 +320,6 @@ const submitPhoto = async () => {
           status_bg.value = "bg-gray-900";
         }, 3000);
       } else {
-        // alert("File uploaded successfully.");
         console.log(responsedata.value);
 
         uploadSuccess.value = true;

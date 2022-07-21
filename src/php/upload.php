@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
+
 if (isset($_POST['sessionName'])) {
     $sessionName = $_POST['sessionName'];
     $sessionNameNoSpace = preg_replace('/\s+/', '', $sessionName);;

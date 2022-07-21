@@ -116,6 +116,7 @@
           :center="center"
           :zoom="7"
           :disableDefaultUi="true"
+          @click="test"
         >
           <Marker
             v-for="location in pLocation"
@@ -249,6 +250,10 @@ const showMenu = () => {
 const zoomPhoto = (photo) => {
   zoomShowing.value = !zoomShowing.value;
   selectedPhoto.value = photo;
+};
+
+const test = (e) => {
+  console.log(":test: " + e.target);
 };
 
 var response;
