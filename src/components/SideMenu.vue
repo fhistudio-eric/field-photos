@@ -4,12 +4,12 @@
       bg-white/50
       backdrop-blur-lg
       h-full
-      w-full
       absolute
       transition-all
       duration-500
       flex flex-col
       z-50
+      w-[360px]
     "
     :class="{ '-ml-[690px] ': menuShowing == false }"
   >

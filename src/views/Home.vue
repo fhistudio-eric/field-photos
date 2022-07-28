@@ -5,7 +5,7 @@
       h-full
       flex flex-col
       justify-between
-      md:container md:mx-auto md:w-[360px]
+      md:container md:mx-auto
       relative
       overflow-x-hidden
     "

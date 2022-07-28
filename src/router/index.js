@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import PhotoUploader from "../views/PhotoUploader.vue";
 import Viewer from "../views/Viewer.vue";
+import ViewerDesktop from "../views/ViewerDesktop.vue";
 import Help from "../views/Help.vue";
 
 const routes = [
@@ -10,15 +11,23 @@ const routes = [
         path: "/",
         name: "Home",
         component: Home,
-    }, {
+    },
+    {
         path: "/photo",
         name: "PhotoUploader",
         component: PhotoUploader,
-    }, {
+    },
+    {
         path: "/viewer",
         name: "Viewer",
         component: Viewer,
-    }, {
+    },
+    {
+        path: "/viewerdesktop",
+        name: "ViewerDesktop",
+        component: ViewerDesktop,
+    },
+    {
         path: "/help",
         name: "Help",
         component: Help,
