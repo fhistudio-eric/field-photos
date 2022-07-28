@@ -49,22 +49,22 @@
           @keyup.enter="load"
         />
         <button
-          class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
+          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
           @click="load"
         >
           <SearchIcon class="mr-1 w-4 h-4 font-extrabold" />
         </button>
         <button
-          class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
-          @click="loadAll"
-        >
-          ALL
-        </button>
-        <button
-          class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
+          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
           @click="toggleDateFilter"
         >
           <CalendarIcon class="mr-1 w-4 h-4 font-extrabold" />
+        </button>
+        <button
+          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
+          @click="loadAll"
+        >
+          ALL
         </button>
       </div>
       <div
@@ -294,7 +294,7 @@ const photos = ref();
 
 const menuShowing = ref(false);
 const zoomShowing = ref(false);
-const dateFilterShowing = ref(true);
+const dateFilterShowing = ref(false);
 const selectedPhoto = ref({});
 
 const dateOperator = ref("from");
