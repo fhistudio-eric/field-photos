@@ -14,7 +14,7 @@
         class="
           text-3xl
           font-extrabold
-          mb-2
+          mb-1
           pt-2
           flex
           items-center
@@ -45,7 +45,8 @@
           type="text"
           class="w-full border border-gray-500 p-2 rounded-sm"
           v-model="sessionName"
-          placeholder="enter your session name here"
+          placeholder="enter a session name here"
+          @keyup.enter="load"
         />
         <button
           class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
@@ -59,6 +60,61 @@
         >
           ALL
         </button>
+        <button
+          class="p-2 px-4 border border-gray-900 ml-1 flex items-center"
+          @click="toggleDateFilter"
+        >
+          <CalendarIcon class="mr-1 w-4 h-4 font-extrabold" />
+        </button>
+      </div>
+      <div
+        v-if="dateFilterShowing"
+        class="w-full p-2 bg-gray-100 mt-1 flex items-center justify-between"
+      >
+        <div class="flex flex-grow items-center">
+          <div class="pl-4 pr-2 font-extrabold flex items-center">
+            <CalendarIcon class="mr-1 w-4 h-4 font-extrabold" />
+            Show all photos...
+          </div>
+          <select
+            v-model="dateOperator"
+            class="
+              w-28
+              p-2
+              bg-transparent
+              focus:outline-none
+              outline-none
+              border-b-2 border-green-500
+              text-center
+            "
+            @change="updateDateOperator"
+          >
+            <option value="from">from</option>
+            <option value="before">before</option>
+            <option value="after">after</option>
+            <option value="between">between</option>
+          </select>
+          <input
+            type="date"
+            class="w-34 p-2 bg-transparent focus:outline-none outline-none"
+            v-model="startDate"
+          />
+          <div class="px-2 font-extrabold" v-if="dateOperator == 'between'">
+            and
+          </div>
+          <input
+            v-if="dateOperator == 'between'"
+            type="date"
+            class="w-34 p-2 bg-transparent focus:outline-none outline-none"
+            v-model="endDate"
+          />
+          <button
+            class="p-2 px-4 border border-gray-900 ml-4 flex items-center"
+            @click="loadByDate"
+          >
+            GO
+          </button>
+        </div>
       </div>
     </div>
 
@@ -69,7 +125,7 @@
           class="h-full"
           :center="center"
           :zoom="zoom"
-          :disableDefaultUi="true"
+          :disableDefaultUi="false"
           @click="test"
         >
           <Marker
@@ -121,12 +177,14 @@
             bg-clip-text bg-gradient-to-br
             from-blue-400
             to-green-600
+            text-center
           "
         >
           <CubeTransparentIcon
             class="text-gray-900 mr-1 w-10 h-10 animate-bounce"
           />
-          No Session found with that Name
+          No Photos found. <br />
+          Refine your search.
         </div>
 
         <div v-if="noPhotosFound == false" class="grid grid-cols-4 gap-2">
@@ -224,6 +282,7 @@ import { CubeTransparentIcon } from "@heroicons/vue/outline";
 import { MenuIcon } from "@heroicons/vue/outline";
 import { XIcon } from "@heroicons/vue/outline";
 import { SearchIcon } from "@heroicons/vue/outline";
+import { CalendarIcon } from "@heroicons/vue/outline";
 
 const store = defaultStore();
 const router = useRouter();
@@ -235,7 +294,12 @@ const photos = ref();
 
 const menuShowing = ref(false);
 const zoomShowing = ref(false);
+const dateFilterShowing = ref(true);
 const selectedPhoto = ref({});
+
+const dateOperator = ref("from");
+const startDate = ref("");
+const endDate = ref("");
 
 //MAP
 const center = ref({ lat: 41.7679044, lng: -72.751958 });
@@ -249,6 +313,7 @@ const emit = defineEmits(["showMenu"]);
 const showMenu = () => {
   emit("showMenu");
 };
+
 const zoomPhoto = (photo) => {
   zoomShowing.value = !zoomShowing.value;
   selectedPhoto.value = photo;
@@ -262,11 +327,57 @@ const zoomPhoto = (photo) => {
   }
 };
 
+const toggleDateFilter = () => {
+  dateFilterShowing.value = !dateFilterShowing.value;
+};
+
 const test = (e) => {
   console.log(":test: " + e.target);
 };
 
+//QUERIES//
 var response;
+
+const loadByDate = async () => {
+  photos.value = null;
+  pLocation.value = {};
+  selectedPhoto.value = {};
+  photos.value = null;
+
+  let formData = new FormData();
+  formData.append("dateOperator", dateOperator.value);
+  formData.append("startDate", startDate.value);
+  formData.append("endDate", endDate.value);
+
+  if (store.host == "www.fhistudio-apps.com") {
+    response = await axios.post(
+      "https://www.fhistudio-apps.com/fieldphotos/php/loadAllPhotosByDate.php",
+      formData
+    );
+  } else {
+    response = await axios.post("/php/loadAllPhotosByDate.php", formData);
+  }
+
+  photos.value = response.data;
+
+  for (const [key, value] of Object.entries(response.data)) {
+    var latitude = parseFloat(value.lat);
+    var longitude = parseFloat(value.lng);
+
+    var photoObj = {
+      center: { lat: latitude, lng: longitude },
+      fileName: value.fileName,
+    };
+    pLocation.value = { ...pLocation.value, ["COOL" + value.id]: photoObj };
+  }
+
+  if (photos.value == "NONE") {
+    noPhotosFound.value = true;
+  } else {
+    noPhotosFound.value = false;
+  }
+};
+
 const load = async () => {
   photos.value = null;
   pLocation.value = {};
