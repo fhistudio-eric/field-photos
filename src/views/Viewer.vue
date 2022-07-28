@@ -49,19 +49,19 @@
           @keyup.enter="load"
         />
         <button
-          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
+          class="p-2 md:px-6 border border-gray-900 ml-1 flex items-center"
           @click="load"
         >
           <SearchIcon class="mr-1 w-4 h-4 font-extrabold" />
         </button>
         <button
-          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
+          class="p-2 md:px-6 border border-gray-900 ml-1 flex items-center"
           @click="toggleDateFilter"
         >
           <CalendarIcon class="mr-1 w-4 h-4 font-extrabold" />
         </button>
         <button
-          class="p-2 px-6 border border-gray-900 ml-1 flex items-center"
+          class="p-2 md:px-6 border border-gray-900 ml-1 flex items-center"
           @click="loadAll"
         >
           ALL
@@ -71,7 +71,7 @@
         v-if="dateFilterShowing"
         class="w-full p-2 bg-gray-100 mt-1 flex items-center justify-between"
       >
-        <div class="flex flex-grow items-center">
+        <div class="flex flex-grow md:flex-row flex-col items-center">
           <div class="pl-4 pr-2 font-extrabold flex items-center">
             <CalendarIcon class="mr-1 w-4 h-4 font-extrabold" />
             Show all photos...
@@ -133,14 +133,16 @@
             :key="location"
             :options="{ position: location.center }"
           >
-            <InfoWindow>
+            <InfoWindow class="w-44">
               <img
                 :src="
                   'https://www.fhistudio-apps.com/fieldphotos/uploads/' +
                   location.fileName
                 "
-                class="w-32"
-            /></InfoWindow>
+                class="w-full"
+              />
+              <div class="mt-2">{{ location.notes }}</div>
+            </InfoWindow>
           </Marker>
         </GoogleMap>
       </div>
@@ -187,7 +189,10 @@
           Refine your search.
         </div>
 
-        <div v-if="noPhotosFound == false" class="grid grid-cols-4 gap-2">
+        <div
+          v-if="noPhotosFound == false"
+          class="grid md:grid-cols-4 grid-cols-3 gap-2"
+        >
           <div v-for="photo in photos" :key="photo.id">
             <button
               class="
@@ -249,18 +254,26 @@
           />
         </div>
         <div class="md:w-1/2 p-4">
-          <div class="font-bold mt-2 text-2xl">Notes:</div>
+          <div class="font-bold mt-2 text-2xl text-green-700">
+            Session Name:
+          </div>
+          <div class="italic text-xl">{{ selectedPhoto.sessionName }}</div>
+          <div class="font-bold mt-2 text-2xl text-green-700">Notes:</div>
           <div class="italic text-xl">{{ selectedPhoto.photoNotes }}</div>
-          <div class="font-bold mt-2 text-2xl">Upload Time:</div>
-          <div class="italic">
+          <div class="font-bold mt-2 text-2xl text-green-700">Upload Time:</div>
+          <div class="italic text-lg">
             {{ selectedPhoto.sessionDate.toString().slice(5, 7) }}/{{
               selectedPhoto.sessionDate.toString().slice(8, 10)
             }}/{{ selectedPhoto.sessionDate.toString().slice(0, 4) }} at
             {{ selectedPhoto.uploadTime }}
           </div>
-          <div class="font-bold mt-2 text-2xl">Location:</div>
-          <div class="italic text-xl">
-            {{ selectedPhoto.lat }},{{ selectedPhoto.lng }}
+          <div class="font-bold mt-2 text-2xl text-green-700">Photo By:</div>
+          <div class="italic text-lg">
+            {{ selectedPhoto.userName }}
+          </div>
+          <div class="font-bold mt-2 text-2xl text-green-700">Coordinates:</div>
+          <div class="italic text-lg">
+            {{ selectedPhoto.lat }}, <br />{{ selectedPhoto.lng }}
           </div>
         </div>
       </div>
@@ -431,13 +444,16 @@ const loadAll = async () => {
   photos.value = response.data;
 
   for (const [key, value] of Object.entries(response.data)) {
+
     var latitude = parseFloat(value.lat);
     var longitude = parseFloat(value.lng);
 
     var photoObj = {
       center: { lat: latitude, lng: longitude },
       fileName: value.fileName,
+      notes: value.photoNotes,
     };
+
     pLocation.value = { ...pLocation.value, ["COOL" + value.id]: photoObj };
   }
 
